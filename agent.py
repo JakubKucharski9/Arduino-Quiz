@@ -1,4 +1,4 @@
-from smolagents import LiteLLMModel, Tool, CodeAgent
+from smolagents import LiteLLMModel, CodeAgent, DuckDuckGoSearchTool, WikipediaSearchTool
 import os
 from dotenv import load_dotenv
 
@@ -14,17 +14,18 @@ class Agent:
         self.agent = CodeAgent(
             tools=[],
             model=model,
-            additional_authorized_imports=['pandas', 'numpy', 'csv', 'PIL', 're'],
-            max_steps=5
+            additional_authorized_imports=['pandas', 'numpy', 'csv', 'PIL', 're', 'json'],
+            max_steps=2
         )
         self.agent_prompt = """
                                 You are a quiz master.
                                 You will be given a topic, generate concise question in this field.
-                                Return 3 outputs:
-                                1. question as string, named as "question"
-                                2. list of answers, named as "answers"
-                                3. correct answer, named as "correct_answer"
-                            
+                                Return 3 outputs as JSON:
+                                1. question as string, named as "question" in lowercase
+                                2. list of 4 answers, just answers, named as "answers" in lowercase
+                                3. correct answer, for example A as first answer, named as "correct_answer" in lowercase
+                                Example:
+                                ['question': 'What is the capital of France?', 'answers': ['Paris', 'London', 'Berlin', 'Rome'], 'correct_answer': 'Paris']
                                 Topic of quiz: {topic}
                         """
     def __call__(self, prompt: str):
