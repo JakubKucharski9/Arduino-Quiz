@@ -21,17 +21,15 @@ try:
             for idx, ans in enumerate(fields_of_questions, start=1):
                 print(f"{chr(64 + idx)}: {ans}")
             if ser.in_waiting > 0:
-                while True:
-                    user_answer = ser.readline().decode("utf-8").strip()
-                    if user_answer == "QA":
-                        question = fields_of_questions[0]
-                    if user_answer == "QB":
-                        question = fields_of_questions[1]
-                    if user_answer == "QC":
-                        question = fields_of_questions[2]
-                    if user_answer == "QD":
-                        question = fields_of_questions[3]
-                    break
+                user_answer = ser.readline().decode("utf-8").strip()
+                if user_answer == "QA":
+                    question = fields_of_questions[0]
+                if user_answer == "QB":
+                    question = fields_of_questions[1]
+                if user_answer == "QC":
+                    question = fields_of_questions[2]
+                if user_answer == "QD":
+                    question = fields_of_questions[3]
 
                 stage = 1
 
@@ -46,16 +44,14 @@ try:
             for idx, ans in enumerate(answers, start=1):
                 print(f"{chr(64 + idx)}: {ans}")
             if ser.in_waiting > 0:
-                while True:
-                    user_answer = ser.readline().decode("utf-8").strip()
-                    print(f"User answer: {user_answer}")
-                    if user_answer == correct_answer:
-                        print("Correct!")
-                        ser.write(b"1")
-                    else:
-                        print("Incorrect!")
-                        ser.write(b"0")
-                    break
+                user_answer = ser.readline().decode("utf-8").strip()
+                print(f"User answer: {user_answer}")
+                if user_answer == correct_answer:
+                    print("Correct!")
+                    ser.write(b"1")
+                else:
+                    print("Incorrect!")
+                    ser.write(b"0")
 
                 stage = 0
 except KeyboardInterrupt:
