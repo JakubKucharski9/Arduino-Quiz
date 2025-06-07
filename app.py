@@ -23,7 +23,7 @@ if st.button("Start"):
         ser = serial.Serial(com_port, 9600, timeout=1)
         time.sleep(2)
 
-        stage = 1
+        stage = 0
 
         try:
             while True:
