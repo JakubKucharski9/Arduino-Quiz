@@ -1,7 +1,9 @@
 smolagents == 1.17.0
 python-dotenv == 1.1.0
 smolagents[litellm]
-pyserial
+pyserial~=3.5
 requests
 duckduckgo-search
 wikipedia-api
+pandas~=2.3.0
+streamlit~=1.45.1
