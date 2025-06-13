@@ -10,51 +10,51 @@ int stage = 0;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(buttonPinA, INPUT);
-  pinMode(buttonPinB, INPUT);
-  pinMode(buttonPinC, INPUT);
-  pinMode(buttonPinD, INPUT);
+  pinMode(buttonPinA, INPUT_PULLUP);
+  pinMode(buttonPinB, INPUT_PULLUP);
+  pinMode(buttonPinC, INPUT_PULLUP);
+  pinMode(buttonPinD, INPUT_PULLUP);
   pinMode(ledPinG, OUTPUT);
   pinMode(ledPinR, OUTPUT);
 }
 
 void loop() {
   if(stage == 0){
-      if (digitalRead(buttonPinA) == HIGH) {
+      if (digitalRead(buttonPinA) == LOW) {
         Serial.println("QA");
         delay(300);
         stage++;
       }
-      if (digitalRead(buttonPinB) == HIGH) {
+      if (digitalRead(buttonPinB) == LOW) {
         Serial.println("QB");
         delay(300);
         stage++;
       }
-      if (digitalRead(buttonPinC) == HIGH) {
+      if (digitalRead(buttonPinC) == LOW) {
         Serial.println("QC");
         delay(300);
         stage++;
       }
-      if (digitalRead(buttonPinD) == HIGH) {
+      if (digitalRead(buttonPinD) == LOW) {
         Serial.println("QD");
         delay(300);
         stage++;
       }
   }
   else if(stage == 1){
-      if (digitalRead(buttonPinA) == HIGH) {
+      if (digitalRead(buttonPinA) == LOW) {
         Serial.println("A");
         delay(300);
       }
-      if (digitalRead(buttonPinB) == HIGH) {
+      if (digitalRead(buttonPinB) == LOW) {
         Serial.println("B");
         delay(300);
       }
-      if (digitalRead(buttonPinC) == HIGH) {
+      if (digitalRead(buttonPinC) == LOW) {
         Serial.println("C");
         delay(300);
       }
-      if (digitalRead(buttonPinD) == HIGH) {
+      if (digitalRead(buttonPinD) == LOW) {
         Serial.println("D");
         delay(300);
       }
