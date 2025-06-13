@@ -37,16 +37,15 @@ try:
                             qa_fetched = False  # reset przy każdej nowej odpowiedzi z Arduino
                             if ser.in_waiting > 0:
                                 user_answer = ser.readline().decode("utf-8").strip()
-                                if user_answer == "QA":
-                                    question = fields_of_questions[0]
-                                elif user_answer == "QB":
-                                    question = fields_of_questions[1]
-                                elif user_answer == "QC":
-                                    question = fields_of_questions[2]
-                                elif user_answer == "QD":
-                                    question = fields_of_questions[3]
-
-                                stage = 1
+                                mapping = {
+                                    "QA": "Embed Circuits",
+                                    "QB": "Machine Learning",
+                                    "QC": "Physics",
+                                    "QD": "Artificial Intelligence"
+                                }
+                                if user_answer in mapping:
+                                    question = mapping[user_answer]
+                                    stage = 1
 
                         if stage == 1:
                             if not qa_fetched:
@@ -66,20 +65,19 @@ try:
                                     st.write(f"{chr(64 + idx)}: {ans}")
                                 user_answer = b''
                                 while user_answer == b'':
-                                    user_answer = ser.readline()
+                                    user_answer = ser.readline().decode("utf-8").strip()
                                     if user_answer != b'':
                                         break
                                 user_answer = str(user_answer)[2]
-                                user_answer_normalised = None
 
-                                if user_answer.lower() == 'a':
-                                    user_answer_normalised = answers[0]
-                                elif user_answer.lower() == 'b':
-                                    user_answer_normalised = answers[1]
-                                elif user_answer.lower() == 'c':
-                                    user_answer_normalised = answers[2]
-                                elif user_answer.lower() == 'd':
-                                    user_answer_normalised = answers[3]
+                                mapping_answers = {
+                                    "A": answers[0],
+                                    "B": answers[1],
+                                    "C": answers[2],
+                                    "D": answers[3]
+                                }
+
+                                user_answer_normalised = mapping_answers[user_answer]
 
                                 if user_answer_normalised:
                                     st.write(f"User answer: {user_answer_normalised}")
