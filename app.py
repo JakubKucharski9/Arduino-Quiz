@@ -28,9 +28,13 @@ try:
 
                 stage = 0
 
+                qa_fetched = False  # flaga ograniczająca zapytanie do agenta
+                answer = None  # cache odpowiedzi
+
                 try:
                     while True:
                         if stage == 0:
+                            qa_fetched = False  # reset przy każdej nowej odpowiedzi z Arduino
                             if ser.in_waiting > 0:
                                 user_answer = ser.readline().decode("utf-8").strip()
                                 if user_answer == "QA":
@@ -45,25 +49,49 @@ try:
                                 stage = 1
 
                         if stage == 1:
-                            answer = agent(question)
-                            answer = json.loads(answer)
-                            question = answer.get("question")
-                            answers = answer.get("answers")
-                            correct_answer = answer.get("correct_answer")
-                            st.write(f"Question: {question}")
-                            for idx, ans in enumerate(answers, start=1):
-                                st.write(f"{chr(64 + idx)}: {ans}")
-                            if ser.in_waiting > 0:
-                                user_answer = ser.readline().decode("utf-8").strip()
-                                st.write(f"User answer: {user_answer}")
-                                if user_answer == correct_answer:
-                                    st.write("Correct!")
-                                    ser.write(b"1")
-                                else:
-                                    st.write("Incorrect!")
-                                    ser.write(b"0")
+                            if not qa_fetched:
+                                answer = agent(question)
+                                try:
+                                    answer = json.loads(str(answer))
+                                except json.JSONDecodeError:
+                                    answer = answer
+                                qa_fetched = True
 
-                                stage = 0
+                                question_text = answer.get("question")
+                                answers = answer.get("answers")
+                                correct_answer = answer.get("correct_answer")
+
+                                st.write(f"Question: {question_text}")
+                                for idx, ans in enumerate(answers, start=1):
+                                    st.write(f"{chr(64 + idx)}: {ans}")
+                                user_answer = b''
+                                while user_answer == b'':
+                                    user_answer = ser.readline()
+                                    if user_answer != b'':
+                                        break
+                                user_answer = str(user_answer)[2]
+                                user_answer_normalised = None
+
+                                if user_answer.lower() == 'a':
+                                    user_answer_normalised = answers[0]
+                                elif user_answer.lower() == 'b':
+                                    user_answer_normalised = answers[1]
+                                elif user_answer.lower() == 'c':
+                                    user_answer_normalised = answers[2]
+                                elif user_answer.lower() == 'd':
+                                    user_answer_normalised = answers[3]
+
+                                if user_answer_normalised:
+                                    st.write(f"User answer: {user_answer_normalised}")
+                                    if user_answer_normalised == correct_answer:
+                                        st.write("Correct!")
+                                        ser.write(b"1")
+                                    else:
+                                        st.write("Incorrect!")
+                                        ser.write(b"0")
+
+                                    stage = 0
+
                 except KeyboardInterrupt:
                     st.write("\nEnd of the program – closing port")
                 finally:
