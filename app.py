@@ -64,11 +64,13 @@ try:
                                 for idx, ans in enumerate(answers, start=1):
                                     st.write(f"{chr(64 + idx)}: {ans}")
                                 user_answer = b''
-                                while user_answer == b'':
+                                while not user_answer:
                                     user_answer = ser.readline().decode("utf-8").strip()
-                                    if user_answer != b'':
+
+                                    if user_answer:
                                         break
-                                user_answer = str(user_answer)[2]
+
+                                user_answer = str(user_answer)
 
                                 mapping_answers = {
                                     "A": answers[0],
@@ -81,11 +83,15 @@ try:
 
                                 if user_answer_normalised:
                                     st.write(f"User answer: {user_answer_normalised}")
-                                    if user_answer_normalised == correct_answer:
+                                    if (user_answer_normalised == correct_answer or
+                                            user_answer.lower() == correct_answer or
+                                            user_answer.upper() == correct_answer or
+                                            user_answer_normalised.lower() == correct_answer):
                                         st.write("Correct!")
                                         ser.write(b"1")
                                     else:
                                         st.write("Incorrect!")
+                                        st.write(f"Correct answer: {correct_answer}")
                                         ser.write(b"0")
 
                                     stage = 0

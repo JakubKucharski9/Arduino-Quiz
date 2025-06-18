@@ -1,5 +1,5 @@
-const int buttonPinA = 2;
-const int buttonPinB = 3;
+const int buttonPinA = 7;
+const int buttonPinB = 6;
 const int buttonPinC = 4;
 const int buttonPinD = 5;
 
